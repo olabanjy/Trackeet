@@ -1,0 +1,100 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link href="{% static 'vendor/dropzone.css' %}" rel="stylesheet"> 
+<link href="{% static 'css/date_picker.css' %}" rel="stylesheet"> 
+{% endblock %}
+{% block content %}
+<div class="content-wrapper">
+    {% include "core/messages.html" %}
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Vendors</a>
+        </li>
+        <li class="breadcrumb-item active">BMI</li>
+	  </ol>
+	  
+	  <div class="box_general">
+		<div class="header_box">
+			<h2 class="d-inline-block">Check List</h2>
+			
+		</div>
+		<div class="list_general reviews">
+			<ul>
+				<li>
+					
+					
+					
+					<h4>Orchid Report Metadata </h4> <br>
+					<p> File Format must be (.xlsx) </p>
+					<p>Upload metadata file below </p>
+					<p> You will get a mail prompt if successful, if otherwise? you will get a corrupt file prompt </p>
+					<p> To update records, rename the updated original document and reupload </p>
+					
+				</li>
+				
+				
+				
+				
+			</ul>
+		</div>
+	</div>
+
+
+		<div class="box_general padding_bottom">
+
+			<div class="row">
+				<div class="col-md-6">
+                    <div class="header_box version_2">
+                        <h2><i class="fa fa-file"></i>Upload Album Metadata </h2>
+                    </div>
+					<div class="form-group">
+                        <form  method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{aform.album_file}}
+                            <button type="submit" class="btn_1 medium">Submit</button>
+                        </form>
+					</div> 
+                </div>
+                <div class="col-md-6">
+                    <div class="header_box version_2">
+                        <h2><i class="fa fa-file"></i>Upload Track Metadata </h2>
+                    </div>
+					<div class="form-group">
+                        <form  method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{tform.track_file}}
+                            <button type="submit" class="btn_1 medium">Submit</button>
+                        </form>
+					</div>
+				</div>
+			</div>
+			<!-- /row-->
+		</div>
+		<!-- /box_general-->
+		
+		
+		<!-- /box_general-->
+		
+	
+		<!-- /box_general-->
+	
+	  </div>
+	  <!-- /.container-fluid-->
+   	</div>
+     
+{%  endblock %}
+
+    <!-- /.container-wrapper-->
+
+{% block extra_script %}
+
+<script src="{% static 'vendor/dropzone.min.js' %}"></script> 
+<script src="{% static 'vendor/bootstrap-datepicker.js' %}"></script> 
+<script>$('input.date-pick').datepicker();</script>
+
+{% endblock %}
+   

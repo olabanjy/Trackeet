@@ -1,0 +1,527 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link href="{% static 'vendor/dropzone.css' %}" rel="stylesheet"> 
+<link href="{% static 'css/date_picker.css' %}" rel="stylesheet"> 
+{% endblock %}
+{% block content %}
+<div class="content-wrapper">
+    {% include "core/messages.html" %}
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Albums</li>
+    </ol>
+    
+
+    <div class="card mb-3 for_search" >
+      <div class="card-header">
+        <i class="fa fa-table"></i> Search Album Record Here 
+        </div>
+    <div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+					<thead>
+						<tr>
+							<th> <input type="text"  id="product_title" onkeyup="get_album(this.id);" > <br>
+								Product Title</th>
+							<th>  <input type="text"  id="product_upc" onkeyup="get_album(this.id);" > <br>  Product UPC </th>
+							<th> <input type="text" name="" id="genre" onkeyup="get_album(this.id);"> <br>  Genre </th> 
+							<th>  Release Date </th>
+							<th> Total Volume  </th>
+							<th>  Imprint Label </th>
+		
+							<th> <input type="text" name="" id="product_artist" onkeyup="get_album(this.id);"> <br> Product Artist </th>
+							<th>  Artist Url </th>
+							<th>  Catalog Number </th> 
+							<th>  Manufacture Upc </th>
+							<th> Deleted ? </th>
+							<th>  Total Tracks </th>
+		
+							<th>  CLINE </th>
+							<!-- <th>  Territories Carveouts </th> -->
+							<!-- <th>  Master Carveouts </th> -->
+							<th>  Processed Day  </th>
+							<th>  Updated Time </th>
+
+						</tr>
+					  </thead>
+				</table>
+			</div>
+		  </div>
+
+		  <div id="search-results">
+
+      </div>
+      
+    </div>
+
+	
+	
+
+	  <div class="card mb-3">
+
+      <div class="card-header">
+		<i class="fa fa-table"></i> Album Table  <br>
+		<strong><i> To edit any record, double click on the field. It will change to an input field. Make changes and punch Enter button to effect changes  </i></strong>
+        <hr>
+        <a type="button" class="btn btn-primary float-left" data-toggle="modal" data-target="#addAlbumRecord" > Add Album </a>
+        <div style="padding-left: 2%;" class="float-right">
+		<a  type="button" href="{% url 'core:export_album_xls' %}" class="btn btn-primary"  > Export Data </a>
+		
+       </div>	
+  
+        <a type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#albumsearchModal" > Filter </a> 
+        
+        
+      
+      </div>
+
+        
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th id="col_product_title_head"><br>
+                    Product Title</th>
+                  <th id="col_product_upc_head">    Product UPC </th>
+                  <th id="col_genre_head">   Genre </th> 
+                  <th id="col_release_date_head">  Release Date </th>
+                  <th id="col_total_volume_head"> Total Volume  </th>
+                  <th id="col_imprint_label_head">  Imprint Label </th>
+        
+                  <th id="col_product_artist_head">  Product Artist </th>
+                  <th id="col_artist_url_head">  Artist Url </th>
+                  <th id="col_catalog_number_head">  Catalog Number </th> 
+                  <th id="col_manufacture_upc_head">  Manufacture Upc </th>
+                  <th id="col_deleted_head"> Deleted ? </th>
+                  <th id="col_total_tracks_head">  Total Tracks </th>
+        
+                  <th id="col_cline_head">  CLINE </th>
+                  <!-- <th id="col_territories_carveouts_head">  Territories Carveouts </th> -->
+                  <!-- <th id="col_master_carveouts_head">  Master Carveouts </th> -->
+                  <th id="col_processed_day_head">  Processed Day  </th>
+                  <th id="col_updated_day_head">  Updated Time </th>
+                </tr>
+              </thead>
+              <tbody>
+				  {% for item in album %}
+                <tr>
+                  <td class="col_product_title editable" data-id="{{ item.id }}" data-type="product_title">{{item.product_title}}</td>
+                  <td class="col_product_upc">{{item.product_upc}}</td>
+                  <td class="col_genre editable" data-id="{{ item.id }}" data-type="genre">{{item.genre}}</td>
+                  <td class="col_release_date editable" data-id="{{ item.id }}" data-type="release_date">{{item.release_date}}</td>
+                  <td class="col_total_volume editable" data-id="{{ item.id }}" data-type="total_volume">{{item.total_volume}}</td>
+                  <td class="col_imprint_label editable" data-id="{{ item.id }}" data-type="imprint_label">{{item.imprint_label}}</td>
+                  <td class="col_product_artist editable" data-id="{{ item.id }}" data-type="product_artist">{{item.product_artist}}</td>
+                  <td class="col_artist_url editable" data-id="{{ item.id }}" data-type="artist_url">{{item.artist_url}}</td>
+                  <td class="col_catalog_number editable" data-id="{{ item.id }}" data-type="catalog_number">{{item.catalog_number}}</td>
+                  <td class="col_manufacture_upc">{{item.manufacture_upc}}</td>
+                  <td class="col_deleted">{{item.deleted}}</td>
+                  <td class="col_total_tracks">{{item.total_tracks}}</td>
+                  <td class="col_cline">{{item.cline}}</td>
+                  <!-- <td class="col_territories_carveouts">{{item.territories_carveouts}}</td> -->
+                  <!-- <td class="col_master_carveouts">{{item.master_carveouts}}</td> -->
+                  <td class="col_processed_day">{{item.processed_day}}</td>
+                  <td class="col_updated_day">{{item.updated_time}}</td>
+				</tr>
+				{% endfor %}
+                
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- <div class="card-footer text-muted">
+          <ul class="pagination pagination-sm float-right">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+            </li>
+            {% endif %}
+            
+            <li class="page-item">
+              <strong>
+                <a class="page-link"> Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a>
+              </strong>
+              
+            </li>
+    
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+            {% endif %}
+            
+          </ul>
+        </div> -->
+        
+
+        <!-- <div class="card-footer text-muted"><a href="{% url 'core:export_album_xls' %}"> <strong> Click Here to Export All Album Data  </strong></a></div> -->
+  </div>
+
+  </div>
+</div>
+
+
+     
+{%  endblock %}
+
+
+
+{% block search_modal %}
+<div class="modal fade" id="albumsearchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">
+		Select Columns that you want to hide  </h5>
+		  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">×</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_product_title" onchange="hide_show_table_album(this.id);" >Product Title</label>
+					</div>
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_product_upc" onchange="hide_show_table_album(this.id);">Product UPC</label>
+					</div>
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_genre" onchange="hide_show_table_album(this.id);" >Genre</label>
+					</div>
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_release_date" onchange="hide_show_table_album(this.id);">Release Date  </label>
+					</div>
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_total_volume" onchange="hide_show_table_album(this.id);">Total Volume</label>
+					</div>
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_imprint_label" onchange="hide_show_table_album(this.id);" >Imprint Label </label>
+					</div>
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_product_artist" onchange="hide_show_table_album(this.id);">Product Artist </label>
+					</div>
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_artist_url" onchange="hide_show_table_album(this.id);">Artist URL</label>
+					</div>
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_catalog_number" onchange="hide_show_table_album(this.id);" >Catalog Number</label>
+					</div>
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_manufacture_upc" onchange="hide_show_table_album(this.id);">Manufacture UPC</label>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_deleted" onchange="hide_show_table_album(this.id);">Deleted?</label>
+					</div>
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_total_tracks" onchange="hide_show_table_album(this.id);">Total Tracks</label>
+					</div>
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_cline" onchange="hide_show_table_album(this.id);"> CLINE </label>
+					</div>
+					<!-- <div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_territories_carveouts" onchange="hide_show_table_album(this.id);">Territories Carveouts </label>
+					</div> -->
+					<!-- <div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_master_carveouts" onchange="hide_show_table_album(this.id);">Master Carveouts</label>
+					</div> -->
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_processed_day" onchange="hide_show_table_album(this.id);" >Processed Day </label>
+					</div>
+					<div class="form-group radio_input">
+						<label><input type="checkbox" value="hide" id="col_updated_day" onchange="hide_show_table_album(this.id);"> Last Updated</label>
+					</div>
+				
+				</div>
+			</div>
+		</div>
+
+		<div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Save</button>
+          </div>
+		
+	  </div>
+	</div>
+  </div>
+{% endblock %}
+
+
+
+{% block addRecord_modal %}
+<div class="modal fade" id="addAlbumRecord" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">
+		Add New Album Record  </h5>
+		  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">×</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			
+			 <form method="POST" >
+				{% csrf_token %}
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Product Title</label>
+							{{form.product_title}}
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Product UPC </label>
+							{{form.product_upc}}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Genre</label>
+							{{form.genre}}
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Release Date</label>
+							{{form.release_date}}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Total Volume</label>
+							{{form.total_volume}}
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Imprint Label</label>
+							{{form.imprint_label}}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Product Artist</label>
+							{{form.product_artist}}
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Artist URL</label>
+							{{form.artist_url}}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Catalog Number</label>
+							{{form.catalog_number}}
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Manufacture UPC</label>
+							{{form.manufacture_upc}}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Deleted</label>
+							{{form.deleted}}
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Total Tracks</label>
+							{{form.total_tracks}}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>CLINE</label>
+							{{form.cline}}
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label> Territories Carveouts </label>
+							{{form.territories_carveouts}}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label>Master Carveouts </label>
+							{{form.master_carveouts}}
+						</div>
+					</div>
+					
+				</div>
+				
+				
+				
+				
+				
+				
+				
+				<button class="btn btn-secondary" type="submit" >Save</button>
+				
+			 </form>
+			
+		</div>
+
+		
+		
+	  </div>
+	</div>
+  </div>
+{% endblock %}
+
+
+
+{% block extra_script %}
+
+<script src="{% static 'vendor/dropzone.min.js' %}"></script> 
+<script src="{% static 'vendor/bootstrap-datepicker.js' %}"></script> 
+<script>$('input.date-pick').datepicker();</script>
+
+<script>
+
+
+function get_album(id_name) {
+
+$.ajax({
+  type: "GET",
+  url: "{% url 'core:search_album' %}",
+  data: {
+    'product_title': $('#product_title').val(),
+    'product_upc': $('#product_upc').val(),
+    'genre': $('#genre').val(),
+    'product_artist': $('#product_artist').val(),
+    'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+  },
+  success: searchSuccess,
+  dataType: 'html'
+});
+};
+
+
+function searchSuccess(data, textStatus, jqXHR)
+{
+$('#search-results').html(data)
+}
+
+
+
+function hide_show_table_album(col_name)
+{
+ var checkbox_val=document.getElementById(col_name).value;
+ if(checkbox_val=="hide")
+ {
+  var all_col=document.getElementsByClassName(col_name);
+  for(var i=0;i<all_col.length;i++)
+  {
+   all_col[i].style.display="none";
+  }
+  document.getElementById(col_name+"_head").style.display="none";
+  document.getElementById(col_name).value="show";
+ }
+	
+ else
+ {
+  var all_col=document.getElementsByClassName(col_name);
+  for(var i=0;i<all_col.length;i++)
+  {
+   all_col[i].style.display="table-cell";
+  }
+  document.getElementById(col_name+"_head").style.display="table-cell";
+  document.getElementById(col_name).value="hide";
+ }
+}
+</script>
+
+<script>
+	$(document).ready(function(){
+		$(document).on("dblclick",".editable",function(){
+			var value=$(this).text();
+			var data_type=$(this).data("type");
+			var input_type="text";
+			if(data_type=="created_at")
+			{
+				input_type="datetime-local";
+			}
+			var input="<input type='"+input_type+"' class='input-data' value='"+value+"' class='form-control'>";
+			$(this).html(input);
+			$(this).removeClass("editable")
+		});
+
+		$(document).on("blur",".input-data",function(){
+			var value=$(this).val();
+			var td=$(this).parent("td");
+			$(this).remove();
+			td.html(value);
+			td.addClass("editable");
+			var type=td.data("type");
+			sendToServer(td.data("id"),value,type);
+		});
+		$(document).on("keypress",".input-data",function(e){
+			var key=e.which;
+			if(key==13){
+				var value=$(this).val();
+				var td=$(this).parent("td");
+				$(this).remove();
+				td.html(value);
+				td.addClass("editable");
+			   var type=td.data("type");
+			   sendToServer(td.data("id"),value,type);
+			}
+		});
+
+		function sendToServer(id,value,type){
+			console.log(id);
+			console.log(value);
+			console.log(type);
+			$.ajax({
+				url:"{% url 'core:update_album' %}",
+				type:"POST",
+				data:{id:id,type:type,value:value, 'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()},
+			})
+			.done(function(response){
+				console.log(response);
+			})
+			.fail(function(){
+			   console.log("Error Occured");
+			});
+
+		}
+	});
+</script>
+
+<script src="{% static 'js/admin-datatables.js' %}"></script> 
+
+{% endblock %}
+   

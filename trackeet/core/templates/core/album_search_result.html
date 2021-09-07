@@ -1,0 +1,82 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link href="{% static 'vendor/dropzone.css' %}" rel="stylesheet"> 
+<link href="{% static 'css/date_picker.css' %}" rel="stylesheet"> 
+{% endblock %}
+{% block content %}
+
+
+
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th> 
+                  Product Title</th>
+                <th>  Product UPC </th>
+                <th>   Genre </th> 
+                <th>  Release Date </th>
+                <th> Total Volume  </th>
+                <th>  Imprint Label </th>
+      
+                <th>  Product Artist </th>
+                <th>  Artist Url </th>
+                <th>  Catalog Number </th> 
+                <th>  Manufacture Upc </th>
+                <th> Deleted ? </th>
+                <th>  Total Tracks </th>
+      
+                <th>  CLINE </th>
+                <!-- <th>  Territories Carveouts </th> -->
+                <!-- <th>  Master Carveouts </th> -->
+                <th>  Processed Day  </th>
+                <th>  Updated Time </th>
+              </tr>
+            </thead>
+            <tbody>
+                {% if album %}
+                {% for item in album %}
+              <tr>
+                <td>{{item.product_title}}</td>
+                <td>{{item.product_upc}}</td>
+                <td>{{item.genre}}</td>
+                <td>{{item.release_date}}</td>
+                <td>{{item.total_volume}}</td>
+                <td>{{item.imprint_label}}</td>
+                <td>{{item.product_artist}}</td>
+                <td>{{item.artist_url}}</td>
+                <td>{{item.catalog_number}}</td>
+                <td>{{item.manufacture_upc}}</td>
+                <td>{{item.deleted}}</td>
+                <td>{{item.total_tracks}}</td>
+                <td>{{item.cline}}</td>
+                <!-- <td>{{item.territories_carveouts}}</td> -->
+                <!-- <td>{{item.master_carveouts}}</td> -->
+                <td>{{item.processed_day}}</td>
+                <td>{{item.updated_time}}</td>
+              </tr>
+              {% endfor %}
+              {% else %}
+                <p>No album found.</p>
+            {% endif %}
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+     
+{%  endblock %}
+
+    <!-- /.container-wrapper-->
+
+{% block extra_script %}
+
+<script src="{% static 'vendor/dropzone.min.js' %}"></script> 
+<script src="{% static 'vendor/bootstrap-datepicker.js' %}"></script> 
+<script>$('input.date-pick').datepicker();</script>
+
+{% endblock %}
+   

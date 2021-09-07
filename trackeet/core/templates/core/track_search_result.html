@@ -1,0 +1,113 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link href="{% static 'vendor/dropzone.css' %}" rel="stylesheet"> 
+<link href="{% static 'css/date_picker.css' %}" rel="stylesheet"> 
+{% endblock %}
+{% block content %}
+
+
+
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th> 
+                  Display UPC</th>
+                <th>  Volumne No </th>
+                <th>  Track No </th> 
+                <th>  Hidden Track  </th>
+                <th> Title  </th>
+                <th>  Song Version </th>
+      
+                <th>  Genre </th>
+                <th> ISRC </th>
+                <th>  Track Duration </th> 
+                <th>  Preview Clip Start Time </th>
+                <th>  Preview Clip Duration  </th>
+                <th>  P LINE </th>
+      
+                <th>  Recording Artist </th>
+                <th>  Artist </th>
+                <th>   Release Name </th>
+                <th>  Parental Advisory  </th>
+                <th>  Label Name </th>
+                <th> Producer </th>
+                <th> Publisher   </th>
+      
+                <th>  Writer  </th>
+                <th>  Arranger  </th>
+                <th>  Territories  </th>
+                <th>  Exclusive  </th>
+                <th>  Wholesale Price  </th>
+                <th>  Download </th>
+                <th>  Sales Start Date </th>
+      
+      
+                <th>  Sales End Date </th>
+                <th>  Error  </th>
+                <th>  Processed Day  </th>
+                <th> Last Updated </th>
+              </tr>
+            </thead>
+            <tbody>
+                {% if track %}
+                {% for item in track %}
+              <tr>
+                <td>{{item.display_upc}}</td>
+					<td>{{item.volume_no}}</td>
+					<td>{{item.track_no}}</td>
+					<td>{{item.hidden_track}}</td>
+					<td>{{item.title}}</td>
+					<td>{{item.song_version}}</td>
+
+					<td>{{item.genre}}</td>
+					<td>{{item.isrc}}</td>
+					<td>{{item.track_duration}}</td>
+					<td>{{item.preview_clip_start_time}}</td>
+					<td>{{item.preview_clip_duration}}</td>
+					<td>{{item.p_line}}</td>
+					<td>{{item.recording_artist}}</td>
+					<td>{{item.artist}}</td>
+					<td>{{item.release_name}}</td>
+					<td>{{item.parental_advisory}}</td>
+					<td>{{item.label_name}}</td>
+					<td>{{item.producer}}</td>
+					<td>{{item.publisher}}</td>
+					<td>{{item.writer}}</td>
+					<td>{{item.arranger}}</td>
+					<td>{{item.territories}}</td>
+					<td>{{item.exclusive}}</td>
+					<td>{{item.wholesale_price}}</td>
+					<td>{{item.download}}</td>
+					<td>{{item.sales_start_date}}</td>
+					<td>{{item.sales_end_date}}</td>
+					<td>{{item.error}}</td>
+					<td>{{item.processed_day}}</td>
+					<td>{{item.updated_time}}</td>
+              </tr>
+              {% endfor %}
+              {% else %}
+                <p>No track found.</p>
+            {% endif %}
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+     
+{%  endblock %}
+
+    <!-- /.container-wrapper-->
+
+{% block extra_script %}
+
+<script src="{% static 'vendor/dropzone.min.js' %}"></script> 
+<script src="{% static 'vendor/bootstrap-datepicker.js' %}"></script> 
+<script>$('input.date-pick').datepicker();</script>
+
+
+{% endblock %}
+   

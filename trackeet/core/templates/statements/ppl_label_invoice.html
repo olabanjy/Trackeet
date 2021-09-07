@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+
+    <title>PPL LABEL INVOICE </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+    	body{margin-top:20px;
+background:#eee;
+}
+
+.invoice {
+    padding: 30px;
+}
+/* CSS File Change */
+.invoice h2 {
+	margin-top: 0px;
+	line-height: 0.8em;
+}
+
+.invoice .small {
+	font-weight: 300;
+}
+
+.invoice hr {
+	margin-top: 10px;
+	border-color: #ddd;
+}
+
+.invoice .table tr.line {
+	border-bottom: 1px solid #ccc;
+}
+
+.invoice .table td {
+	border: none;
+}
+
+.invoice .identity {
+	margin-top: 10px;
+	font-size: 1.1em;
+	font-weight: 300;
+}
+
+.invoice .identity strong {
+	font-weight: 600;
+}
+
+
+.grid {
+    position: relative;
+	/* width: 100%; */
+	background: #fff;
+	color: #666666;
+	border-radius: 2px;
+	margin-bottom: 25px;
+	box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="row">
+    			
+					<div class="col-xs-12">
+						<div class="grid invoice">
+							<div class="grid-body">
+								<div class="invoice-title">
+									<div class="row">
+										<div class="col-xs-12">
+											<img src="https://pipminds-website.s3.amazonaws.com/WhatsApp+Image+2021-04-29+at+12.18.56+PM.jpeg" alt="" height="65">
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-xs-12">
+											<h2>LABEL ROYALTY STATEMENT<br>
+											<span class="small"> {{period}} </span></h2>
+										</div>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-xs-6">
+										<address>
+											<strong> {{label_name}} </strong><br>
+											{{city}}<br>
+											{{country}}<br>
+											
+											<abbr title="Email">Email:</abbr> {{email}}
+										</address>
+									</div>
+									<div class="col-xs-6 text-right">
+										<address>
+											<strong> Date:</strong><br>
+											{{date}}
+										</address>
+                                        <address>
+											<strong> Reference Number:</strong><br>
+											{{ref}}
+										</address>
+
+									</div>
+								</div>
+							
+								<div class="row">
+									<div class="col-md-12">
+										<h3>STATEMENT SUMMARY</h3>
+										<table class="table table-striped">
+											<thead>
+												<tr class="line">
+													<td class="text-center" ><strong>Vendor</strong></td>
+													<td class="text-center"><strong>Title/Artist</strong></td>
+													<td class="text-center"><strong>Release</strong></td>
+													<td class="text-right"><strong>Qty</strong></td>
+													<td class="text-right"><strong>Sales</strong></td>
+													<td class="text-right"><strong>To be paid</strong></td>
+												
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													{% for val in vendor %}
+													<td>{{val}}</td>
+													{% endfor %}
+													{% for val in title %}
+													<td> {{val}} </td>
+													{% endfor %}
+													<td class="text-center">15</td>
+													<td class="text-center">$75</td>
+													<td class="text-right">$1,125.00</td>
+													<td class="text-right">$1,125.00</td>
+												</tr>
+												
+												
+												<tr>
+													<td colspan="4"></td>
+													<td class="text-right"><strong>Taxes</strong></td>
+													<td class="text-right"><strong>N/A</strong></td>
+												</tr>
+												<tr>
+													<td colspan="4">
+													</td><td class="text-right"><strong>Total</strong></td>
+													<td class="text-right"><strong>$2,400.00</strong></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>									
+								</div>
+							
+							</div>
+						</div>
+					</div>
+			
+				</div>
+</div>
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	
+</script>
+</body>
+</html>

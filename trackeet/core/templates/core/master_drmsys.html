@@ -1,0 +1,521 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link href="{% static 'vendor/dropzone.css' %}" rel="stylesheet"> 
+<link href="{% static 'css/date_picker.css' %}" rel="stylesheet"> 
+{% endblock %}
+{% block content %}
+<div class="content-wrapper">
+    {% include "core/messages.html" %}
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Master DRMSYS Records</li>
+      </ol>
+		
+	  <div class="card mb-3 for_search" >
+		<div class="card-header">
+			<i class="fa fa-table"></i> Search Master DRMSYS Record Here 
+		  </div>
+
+		  <div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+					<thead>
+						<tr>
+					<th> <input type="text" name="" id="arranger" onkeyup="get_master(this.id);"> <br> Arranger </th>
+					<th> <input type="text" name="" id="artist" onkeyup="get_master(this.id);"> <br> Artist   </th>
+					<th> Artist Url</th> 
+					<th> Bpm   </th>
+					<th> C LINE       </th>
+					<th> Data Type    </th>
+					<th> Deleted    </th>
+					<th> <input type="text"  id="display_upc" onkeyup="get_master(this.id);" > <br> Display UPC  </th>
+					<th> Download    </th>
+					<th> Error    </th>
+					<th> Exclusive    </th>
+					<th> <input type="text" name="" id="genre" onkeyup="get_master(this.id);"> <br> Genre    </th>
+					<th> Genre_alt    </th>
+					<th> Genre_sub    </th>
+					<th> Genre_subalt    </th>
+					<th> Hidden_track    </th>
+					<th> <input type="text" name="" id="isrc" onkeyup="get_master(this.id);"> <br> ISRC    </th>
+					<th> Itunes_Link    </th>
+					<th> Label Catalogno    </th>
+					<th> <input type="text" name="" id="label_name" onkeyup="get_master(this.id);"> <br> Label Name    </th>
+					<th> Language    </th>
+					<th> Manufacturer UPC    </th>
+					<!-- <th> Master Carveouts    </th> -->
+					<th> <input type="text" name="" id="p_line" onkeyup="get_master(this.id);"> <br> P_LINE   </th>
+					<th> Parental Advisory    </th>
+					<th> Preview Clip Duration    </th>
+					<th> preview Clip Start Time    </th>
+					<th> Price Band    </th>
+					<th> <input type="text" name="" id="producer" onkeyup="get_master(this.id);"> <br> Producer    </th>
+					<th> <input type="text" name="" id="publisher" onkeyup="get_master(this.id);"> <br> Publisher    </th>
+					<th> <input type="text" name="" id="recording_artist" onkeyup="get_master(this.id);"> <br> Recording Artist    </th>
+					<th> Release Date    </th>
+					<th> <input type="text" name="" id="release_name" onkeyup="get_master(this.id);"> <br> Release Name    </th>
+					<th> Royalty Rate    </th>
+					<th> Sales End Date    </th>
+					<th> Sales Start Date    </th>
+					<th> Song Version    </th>
+					<th> <input type="text" name="" id="territories" onkeyup="get_master(this.id);">  <br> Territories    </th>
+					<!-- <th> Territories Carveouts    </th> -->
+					<th> <input type="text" name="" id="title" onkeyup="get_master(this.id);"> <br> Title    </th>
+					<th> Total Tracks    </th>
+					<th> Total Volumes    </th>
+					<th> Track Duration    </th>
+					<th> Track No    </th>
+					<th> Vendor Name    </th>
+					<th> Volume No    </th>
+					<th> Wholesale Price    </th>
+					<th> <input type="text" name="" id="writer" onkeyup="get_master(this.id);">  <br> Writer    </th>
+					<th> zIDKey_UPCISRC    </th>
+		
+		
+						</tr>
+					  </thead>
+				</table>
+			</div>
+		  </div>
+
+		  <div id="search-results">
+
+		  </div>
+
+	 </div>
+
+
+
+
+	  <div class="card mb-3">
+        <div class="card-header">
+		  <i class="fa fa-table"></i> DRMSYS Table <br>
+		  <strong><i> To edit any record, double click on the field. It will change to an input field. Make changes and punch Enter button to effect changes  </i></strong>
+		  <hr>
+		  <div style="padding-left: 2%;" class="float-right">
+			<a  type="button" href="{% url 'core:export_drmsys_xls' %}" class="btn btn-primary"  > Export Data </a>
+		 </div>	
+
+			<a type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#mastersearchModal" > Filter </a> 
+		</div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+					<th id="col_arranger_head"> Arranger </th>
+					<th id="col_artist_head"> Artist  </th>
+					<th id="col_artist_url_head"> Artist Url</th> 
+					<th id="col_bpm_head"> Bpm   </th>
+					<th id="col_c_line_head"> C LINE       </th>
+					<th id="col_data_type_head"> Data Type    </th>
+					<th id="col_deleted_head"> Deleted    </th>
+					<th id="col_display_upc_head"> Display UPC  </th>
+					<th id="col_download_head"> Download    </th>
+					<th id="col_error_head"> Error    </th>
+					<th id="col_exclusive_head"> Exclusive    </th>
+					<th id="col_genre_head"> Genre    </th>
+					<th id="col_genre_alt_head"> Genre_alt    </th>
+					<th id="col_genre_sub_head"> Genre_sub    </th>
+					<th id="col_genre_subalt_head"> Genre_subalt    </th>
+					<th id="col_hidden_track_head"> Hidden_track    </th>
+					<th id="col_isrc_head"> ISRC    </th>
+					<th id="col_itunes_link_head"> Itunes_Link    </th>
+					<th id="col_label_catalogno_head"> Label Catalogno    </th>
+					<th id="col_label_name_head"> Label Name    </th>
+					<th id="col_language_head"> Language    </th>
+					<th id="col_manufacturer_upc_head"> Manufacturer UPC    </th>
+					<!-- <th id="col_master_carveouts_head"> Master Carveouts    </th> -->
+					<th id="col_p_line_head"> P_LINE   </th>
+					<th id="col_parental_advisory_head"> Parental Advisory    </th>
+					<th id="col_preview_clip_duration_head"> Preview Clip Duration    </th>
+					<th id="col_preview_clip_start_time_head"> preview Clip Start Time    </th>
+					<th id="col_price_band_head"> Price Band    </th>
+					<th id="col_producer_head"> Producer    </th>
+					<th id="col_publisher_head"> Publisher    </th>
+					<th id="col_recording_artist_head"> Recording Artist    </th>
+					<th id="col_release_date_head"> Release Date    </th>
+					<th id="col_release_name_head"> Release Name    </th>
+					<th id="col_royalty_rate_head"> Royalty Rate    </th>
+					<th id="col_sales_end_date_head"> Sales End Date    </th>
+					<th id="col_sales_start_date_head"> Sales Start Date    </th>
+					<th id="col_song_version_head"> Song Version    </th>
+					<th id="col_territories_head"> Territories    </th>
+					<!-- <th id="col_territories_carveouts_head"> Territories Carveouts    </th> -->
+					<th id="col_title_head"> Title    </th>
+					<th id="col_total_tracks_head"> Total Tracks    </th>
+					<th id="col_total_volumes_head"> Total Volumes    </th>
+					<th id="col_track_duration_head"> Track Duration    </th>
+					<th id="col_track_no_head"> Track No    </th>
+					<th id="col_vendor_name_head"> Vendor Name    </th>
+					<th id="col_volume_no_head"> Volume No    </th>
+					<th id="col_wholesale_price_head"> Wholesale Price    </th>
+					<th id="col_writer_head"> Writer    </th>
+					<th id="col_zIDKey_UPCISRC_head"> zIDKey_UPCISRC    </th>
+                </tr>
+              </thead>
+              
+              <tbody>
+				  {% for item in master %}
+                <tr>
+					<td class="col_arranger">{{item.arranger}}</td>
+					<td class="col_artist">{{item.artist}}</td>
+					<td class="col_artist_url">{{item.artist_url}}</td>
+					<td class="col_bpm">{{item.bpm}}</td>
+					<td class="col_c_line">{{item.c_line}}</td>
+					<td class="col_data_type">{{item.data_type}}</td>
+					<td class="col_deleted">{{item.deleted}}</td>
+					<td class="col_display_upc">{{item.display_upc}}</td>
+					<td class="col_download">{{item.download}}</td>
+					<td class="col_error">{{item.error}}</td>
+					<td class="col_exclusive">{{item.exclusive}}</td>
+					<td class="col_genre">{{item.genre}}</td>
+					<td class="col_genre_alt">{{item.genre_alt}}</td>
+					<td class="col_genre_sub">{{item.genre_sub}}</td>
+					<td class="col_genre_subalt">{{item.genre_subalt}}</td>
+					<td class="col_hidden_track">{{item.hidden_track}}</td>
+					<td class="col_isrc">{{item.isrc}}</td>
+					<td class="col_itunes_link">{{item.itunes_link}}</td>
+					<td class="col_label_catalogno">{{item.label_catalogno}}</td>
+					<td class="col_label_name">{{item.label_name}}</td>
+					<td class="col_language">{{item.language}}</td>
+					<td class="col_manufacturer_upc">{{item.manufacturer_upc}}</td>
+					<!-- <td class="col_master_carveouts">{{item.master_carveouts}}</td> -->
+					<td class="col_p_line">{{item.p_line}}</td>
+					<td class="col_parental_advisory">{{item.parental_advisory}}</td>
+					<td class="col_preview_clip_duration">{{item.preview_clip_duration}}</td>
+					<td class="col_preview_clip_start_time">{{item.preview_clip_start_time}}</td>
+					<td class="col_price_band">{{item.price_band}}</td>
+					<td class="col_producer">{{item.producer}}</td>
+					<td class="col_publisher">{{item.publisher}}</td>
+					<td class="col_recording_artist">{{item.recording_artist}}</td>
+					<td class="col_release_date">{{item.release_date}}</td>
+					<td class="col_release_name">{{item.release_name}}</td>
+					<td class="col_royalty_rate">{{item.royalty_rate}}</td>
+					<td class="col_sales_end_date">{{item.sales_end_date}}</td>
+					<td class="col_sales_start_date">{{item.sales_start_date}}</td>
+					<td class="col_song_version">{{item.song_version}}</td>
+					<td class="col_territories">{{item.territories}}</td>
+					<!-- <td class="col_territories_carveouts">{{item.territories_carveouts}}</td> -->
+					<td class="col_title">{{item.title}}</td>
+					<td class="col_total_tracks">{{item.total_tracks}}</td>
+					<td class="col_total_volumes">{{item.total_volumes}}</td>
+					<td class="col_track_duration">{{item.track_duration}}</td>
+					<td class="col_track_no">{{item.track_no}}</td>
+					<td class="col_vendor_name">{{item.vendor_name}}</td>
+					<td class="col_volume_no">{{item.volume_no}}</td>
+					<td class="col_wholesale_price">{{item.wholesale_price}}</td>
+					<td class="col_writer">{{item.writer}}</td>
+					<td class="col_zIDKey_UPCISRC">{{item.zIDKey_UPCISRC}}</td>
+				</tr>
+				{% endfor %}
+                
+                
+              </tbody>
+            </table>
+          </div>
+		</div>
+
+
+		<!-- <div class="card-footer text-muted">
+			<ul class="pagination pagination-sm float-right">
+				{% if page_obj.has_previous %}
+				<li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+				<li class="page-item">
+					<a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+				</li>
+				{% endif %}
+				
+				<li class="page-item">
+					<strong>
+						<a class="page-link"> Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a>
+					</strong>
+					
+				</li>
+
+				{% if page_obj.has_next %}
+				<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+				<li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+				{% endif %}
+				
+			</ul>
+		</div> -->
+        <!-- <div class="card-footer text-muted"><a href="{% url 'core:export_drmsys_xls' %}"> <strong> Click Here to Export All DRMSYS Data  </strong></a></div> -->
+	  </div>
+
+	 
+
+
+
+	
+	  </div>
+	  <!-- /.container-fluid-->
+   	</div>
+     
+{%  endblock %}
+
+    <!-- /.container-wrapper-->
+
+
+	{% block search_modal %}
+	<div class="modal fade" id="mastersearchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="exampleModalLabel">
+			Select Columns that you want to hide  </h5>
+			  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">×</span>
+			  </button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_arranger" onchange="hide_show_table(this.id);" >Arranger </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_artist" onchange="hide_show_table(this.id);">Artist </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_artist_url" onchange="hide_show_table(this.id);" > Artist Url</label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_bpm" onchange="hide_show_table(this.id);"> Bpm </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_c_line" onchange="hide_show_table(this.id);">C LINE  </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_data_type" onchange="hide_show_table(this.id);" > Data Type  </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_deleted" onchange="hide_show_table(this.id);" >Deleted </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_display_upc" onchange="hide_show_table(this.id);">Display UPC  </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_download" onchange="hide_show_table(this.id);" > Download</label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_error" onchange="hide_show_table(this.id);"> Error</label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_exclusive" onchange="hide_show_table(this.id);" >Exclusive </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_genre" onchange="hide_show_table(this.id);">Genre  </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_genre_alt" onchange="hide_show_table(this.id);" >Genre_alt </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_genre_sub" onchange="hide_show_table(this.id);"> Genre_sub</label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_genre_subalt" onchange="hide_show_table(this.id);" >Genre_subalt </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_hidden_track" onchange="hide_show_table(this.id);">Hidden_track </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_isrc" onchange="hide_show_table(this.id);">ISRC </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_itunes_link" onchange="hide_show_table(this.id);"> Itunes_Link</label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_label_catalogno" onchange="hide_show_table(this.id);">Label Catalogno </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_label_name" onchange="hide_show_table(this.id);">Label Name  </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_language" onchange="hide_show_table(this.id);">Language </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_manufacturer_upc" onchange="hide_show_table(this.id);"> Manufacturer UPC</label>
+						</div>
+						<!-- <div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_master_carveouts" onchange="hide_show_table(this.id);">Master Carveouts  </label>
+						</div> -->
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_p_line" onchange="hide_show_table(this.id);">P_LINE </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_parental_advisory" onchange="hide_show_table(this.id);">Parental Advisory  </label>
+						</div>
+						
+					</div>
+	
+					<div class="col-md-6">
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_preview_clip_duration" onchange="hide_show_table(this.id);">Preview Clip Duration </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_preview_clip_start_time" onchange="hide_show_table(this.id);">preview Clip Start Time </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_price_band" onchange="hide_show_table(this.id);"> Price Band </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_producer" onchange="hide_show_table(this.id);"> Producer </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_publisher" onchange="hide_show_table(this.id);"> Publisher</label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_recording_artist" onchange="hide_show_table(this.id);" > Recording Artist </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_release_date" onchange="hide_show_table(this.id);"> Release Date </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_release_name" onchange="hide_show_table(this.id);">Release Name </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_royalty_rate" onchange="hide_show_table(this.id);">Royalty Rate  </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_sales_end_date" onchange="hide_show_table(this.id);"> Sales End Date </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_sales_start_date" onchange="hide_show_table(this.id);">  Sales Start Date </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_song_version" onchange="hide_show_table(this.id);">Song Version </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_territories" onchange="hide_show_table(this.id);" >Territories </label>
+						</div>
+						<!-- <div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_territories_carveouts" onchange="hide_show_table(this.id);"> Territories Carveouts</label>
+						</div> -->
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_title" onchange="hide_show_table(this.id);"> Title</label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_total_tracks" onchange="hide_show_table(this.id);">Total Tracks </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_total_volumes" onchange="hide_show_table(this.id);">Total Volumes </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_track_duration" onchange="hide_show_table(this.id);">Track Duration </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_track_no" onchange="hide_show_table(this.id);">Track No  </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_vendor_name" onchange="hide_show_table(this.id);">Vendor Name </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_volume_no" onchange="hide_show_table(this.id);"> Volume No </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_wholesale_price" onchange="hide_show_table(this.id);"> Wholesale Price </label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_writer" onchange="hide_show_table(this.id);"> Writer</label>
+						</div>
+						<div class="form-group radio_input">
+							<label><input type="checkbox" value="hide" id="col_zIDKey_UPCISRC" onchange="hide_show_table(this.id);">zIDKey_UPCISRC </label>
+						</div>
+					
+					</div>
+				</div>
+			</div>
+	
+			<div class="modal-footer">
+				<button class="btn btn-secondary" type="button" data-dismiss="modal">Save</button>
+			  </div>
+			
+		  </div>
+		</div>
+	  </div>
+	{% endblock %}
+	
+
+
+{% block extra_script %}
+
+<script src="{% static 'vendor/dropzone.min.js' %}"></script> 
+<script src="{% static 'vendor/bootstrap-datepicker.js' %}"></script> 
+<script>$('input.date-pick').datepicker();</script>
+
+
+
+<script>
+
+function get_master(id_name) {
+
+		$.ajax({
+			type: "GET",
+			url: "{% url 'core:search_master' %}",
+			data: {
+				'display_upc': $('#display_upc').val(),
+				'title': $('#title').val(),
+				'genre': $('#genre').val(),
+				'isrc': $('#isrc').val(),
+				'p_line': $('#p_line').val(),
+				'recording_artist': $('#recording_artist').val(),
+				'artist': $('#artist').val(),
+				'release_name': $('#release_name').val(),
+				'label_name': $('#label_name').val(),
+				'producer': $('#producer').val(),
+				'publisher': $('#publisher').val(),
+				'writer': $('#writer').val(),
+				'arranger': $('#arranger').val(),
+				'territories': $('#territories').val(),
+				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+			},
+			success: searchSuccess,
+			dataType: 'html'
+		});
+};
+
+function searchSuccess(data, textStatus, jqXHR)
+{
+$('#search-results').html(data)
+}
+
+
+
+
+function hide_show_table(col_name)
+{
+ var checkbox_val=document.getElementById(col_name).value;
+ if(checkbox_val=="hide")
+ {
+  var all_col=document.getElementsByClassName(col_name);
+  for(var i=0;i<all_col.length;i++)
+  {
+   all_col[i].style.display="none";
+  }
+  document.getElementById(col_name+"_head").style.display="none";
+  document.getElementById(col_name).value="show";
+ }
+	
+ else
+ {
+  var all_col=document.getElementsByClassName(col_name);
+  for(var i=0;i<all_col.length;i++)
+  {
+   all_col[i].style.display="table-cell";
+  }
+  document.getElementById(col_name+"_head").style.display="table-cell";
+  document.getElementById(col_name).value="hide";
+ }
+}
+</script>
+<script src="{% static 'js/admin-datatables.js' %}"></script> 
+
+{% endblock %}
+   

@@ -1,0 +1,295 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link href="{% static 'vendor/dropzone.css' %}" rel="stylesheet"> 
+<link href="{% static 'css/date_picker.css' %}" rel="stylesheet"> 
+{% endblock %}
+{% block content %}
+<div class="content-wrapper">
+    {% include "core/messages.html" %}
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Vendors</a>
+        </li>
+        <li class="breadcrumb-item active">DITTO</li>
+	  </ol>
+	  
+	  <div class="box_general">
+		<div class="header_box">
+			<h2 class="d-inline-block">DITTO Vendor Metadata/Statement Processing </h2>
+			
+		</div>
+		<div class="list_general reviews">
+			<div class="row">
+				<div class="col-md-6">
+					<ul> <h5>Processing Metadata <br> <small> NB: Please read the guidelines carefully  </small> </h5> 
+						<li> The document requred here is the metadata to populate the track, album and thereby the master_drmsys records</li> <br>
+						<li> File Format must be (.xlsx) </li><br>
+						<li> Upload metadata in the <i>Upload Metadata</i> section below </li><br>
+						<li> Data processs will commence immediately  </li><br>
+						<li> You will get a mail prompt if successful, if otherwise? you will get a corrupt file prompt  </li> <br>
+						<li> To update records, rename the updated original document and reupload </li> 
+						<li> <a style="text-decoration: underline; color: red;" href="https://imaginariumng.com/email_images/michael/ditto_metadata_sample_v2.xlsx" > DOWNLOAD </a> sample metadata and compare to your metadata before upload <small style="font-weight: 700; color: red;">The fields have to match </small> </li> 
+					</ul>
+				</div>
+				
+				<div class="col-md-6">
+					<ul> <h5>Processing Account Statement  <br> <small> NB: Please read the guidelines carefully  </small> </h5> 
+						<li> The document requred here is the statement to populate the account database records</li> <br>
+						<li> File Format must be (.xlsx) </li><br>
+						<li> Upload statement in the <i>Upload Statement</i> section below </li><br>
+						<li> Data processs will commence immediately  </li><br>
+						<li> You will get a mail prompt if successful, if otherwise? you will get a corrupt file prompt  </li> <br>
+						<li> To update records, rename the updated original document and reupload </li> 
+						<li> <a style="text-decoration: underline; color: red;" href="https://imaginariumng.com/email_images/michael/new_ditto_statement_sample.xlsx" > DOWNLOAD </a> sample statement and compare to your statement before upload <small style="font-weight: 700; color: red;">The fields have to match </small> </li> 
+					</ul>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+		<div class="box_general padding_bottom">
+		
+			
+		
+			<div class="row">
+				<div class="col-md-6">
+					<div class="header_box version_2">
+                        <h2><i class="fa fa-file"></i>Upload Metadata <br> <small> This is for track, album and master_drmsys processing </small> </h2>
+                    </div>
+					<div class="form-group">
+
+                        <!-- <form  class="dropzone" ></form> -->
+                        <form  method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{metadata_form.ditto_metadata_file}}
+                            <button type="submit" class="btn_1 medium">Submit</button>
+                        </form>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="header_box version_2">
+                        <h2><i class="fa fa-file"></i>Upload Statement <br> <small> This is for accounting processing  </small> </h2>
+                    </div>
+					<div class="form-group">
+
+                        <!-- <form  class="dropzone" ></form> -->
+                        <form  method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{accounting_form.ditto_account_file}}
+                            <button type="submit" class="btn_1 medium">Submit</button>
+                        </form>
+					</div>
+				</div>
+
+			</div>
+			<!-- /row-->
+		</div>
+	
+		<div class="box_general padding_bottom">
+					<div class="header_box version_2">
+                        <h2><i class="fa fa-file"></i>Processed Ditto Documents </h2>
+                    </div>
+					<div class="row">
+						<div class="col-md-12">
+							{%if docs %} 
+							<ul>
+								{% for item in docs %}
+								<li><a href="{{item.file_doc.url}}"> {{item.file_name }}</a> <br> <small>Time Processed: {{item.process_time}} </small> 
+									
+									<ul>
+										{% if item.processedtrackfile_set %}
+										{% for a in item.processedtrackfile_set.all %}
+										<li>Output Track Document <br>
+											{% if a.file_doc %}
+											<a style="color: red;" href="{{a.file_doc.url}}"> {{a.file_name}} </a>
+											{% else %}
+											<a href="#"> No file Yet  </a>
+											{% endif %}
+										</li>
+										{% endfor %}
+										{% endif %}
+										
+										{% if item.processedalbumfile_set %}
+										{% for a in item.processedalbumfile_set.all %}
+										<li>Output Album Document <br>
+											{% if a.file_doc %}
+											<a style="color: red;" href="{{a.file_doc.url}}"> {{a.file_name}} </a>
+											{% else %}
+											<a href="#"> No file Yet  </a>
+											{% endif %}
+										</li>
+										{% endfor %}
+										{% endif %}
+										
+										{% if item.processedaccountfile_set %}
+										{% for a in item.processedaccountfile_set.all %}
+										<li>Output Account Document <br>
+											{% if a.file_doc %}
+											<a style="color: red;" href="{{a.file_doc.url}}"> {{a.file_name}} </a>
+											{% else %}
+											<a href="#"> No file Yet  </a>
+											{% endif %}
+										</li>
+										{% endfor %}
+										{% endif %}
+									</ul>
+									
+								</li>
+								{% endfor %}
+							</ul>
+							{% else %}
+							<p> No document has been processed for vendor </p>
+							{% endif %}
+						</div>
+                      
+					</div>
+		</div>
+
+
+		<div class="card mb-3">
+			<div class="card-header">
+			  <i class="fa fa-table"></i> Ditto Accounting Records <br> <br>
+			<strong><i> To edit any record, double click on the field. It will change to an input field. Make changes and punch Enter button to effect changes  </i></strong>
+			</div>
+			<div class="card-body">
+			  <div class="table-responsive">
+				<table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+				  <thead>
+					<tr>
+					  <th>Period</th>
+					  <th>Activity Period</th>
+					  <!-- <th>Retailer</th>  -->
+					  <th>Territory</th>
+					  <th>Product UPC </th>
+					  <th>Manufacturer UPC</th>
+					  <th>Product Code</th>
+					  <!-- <th>Imprint Label </th> -->
+					  <th>Artist Name</th>
+					  <th>Product Name</th>
+					  <th>Track Name</th>
+					  <th>Track Artist</th>
+					  <th>ISRC</th>
+					  <!-- <th>Trans Type </th> -->
+					  <th>Unit Price </th>
+					  <th>Actual Price </th>
+					  <th>Quantity  </th>
+					  <th>Total </th>
+					  <th>Label Share Net Receipts </th>
+
+					</tr>
+				  </thead>
+				  {% if records %}
+				  <tbody>
+					  {% for item in records %}
+					<tr>
+					  <td class="editable" data-id="{{ item.id }}" data-type="period"> {{item.period}} </td>
+					  <td class="editable" data-id="{{ item.id }}" data-type="activity_period"> {{item.activity_period}} </td>
+					  <!-- <td class="editable" data-id="{{ item.id }}" data-type="retailer"> {{item.retailer}} </td> -->
+					  <td class="editable" data-id="{{ item.id }}" data-type="territory"> {{item.territory}} </td>
+					  <td class="editable" data-id="{{ item.id }}" data-type="orchard_UPC"> {{item.orchard_UPC}} </td>
+					  <td class="editable" data-id="{{ item.id }}" data-type="manufacturer_UPC"> {{item.manufacturer_UPC}} </td>
+					  <td class="editable" data-id="{{ item.id }}" data-type="product_code"> {{item.product_code}} </td>
+					  <!-- <td class="editable" data-id="{{ item.id }}" data-type="imprint_label"> {{item.imprint_label}} </td> -->
+					  <td class="editable" data-id="{{ item.id }}" data-type="artist_name"> {{item.artist_name}} </td>
+					  <td class="editable" data-id="{{ item.id }}" data-type="product_name"> {{item.product_name}} </td>
+					  <td class="editable" data-id="{{ item.id }}" data-type="track_name"> {{item.track_name}} </td>
+					  <td class="editable" data-id="{{ item.id }}" data-type="track_artist"> {{item.track_artist}} </td>
+					  <td> {{item.isrc}} </td>
+					  <!-- <td class="editable" data-id="{{ item.id }}" data-type="trans_type"> {{item.trans_type}} </td> -->
+					  <td class="editable" data-id="{{ item.id }}" data-type="unit_price"> {{item.unit_price}} </td>
+					  <td class="editable" data-id="{{ item.id }}" data-type="actual_price"> {{item.actual_price}} </td>
+					  <td class="editable" data-id="{{ item.id }}" data-type="quantity"> {{item.quantity}} </td>
+					  <td class="editable" data-id="{{ item.id }}" data-type="total"> {{item.total}} </td>
+					  <td class="editable" data-id="{{ item.id }}" data-type="label_share_net_receipts"> {{item.label_share_net_receipts}} </td>
+					</tr>
+					{% endfor %}
+				</tbody>
+				
+				{% endif %}
+            </table>
+          </div>
+        </div>
+      </div>
+	
+	  </div>
+	  <!-- /.container-fluid-->
+   	</div>
+     
+{%  endblock %}
+
+    <!-- /.container-wrapper-->
+
+{% block extra_script %}
+
+<script src="{% static 'vendor/dropzone.min.js' %}"></script> 
+<script src="{% static 'vendor/bootstrap-datepicker.js' %}"></script> 
+<script>$('input.date-pick').datepicker();</script>
+
+
+<script>
+	$(document).ready(function(){
+		$(document).on("dblclick",".editable",function(){
+			var value=$(this).text();
+			var data_type=$(this).data("type");
+			var input_type="text";
+			if(data_type=="created_at")
+			{
+				input_type="datetime-local";
+			}
+			var input="<input type='"+input_type+"' class='input-data' value='"+value+"' class='form-control'>";
+			$(this).html(input);
+			$(this).removeClass("editable")
+		});
+
+		$(document).on("blur",".input-data",function(){
+			var value=$(this).val();
+			var td=$(this).parent("td");
+			$(this).remove();
+			td.html(value);
+			td.addClass("editable");
+			var type=td.data("type");
+			sendToServer(td.data("id"),value,type);
+		});
+		$(document).on("keypress",".input-data",function(e){
+			var key=e.which;
+			if(key==13){
+				var value=$(this).val();
+				var td=$(this).parent("td");
+				$(this).remove();
+				td.html(value);
+				td.addClass("editable");
+			   var type=td.data("type");
+			   sendToServer(td.data("id"),value,type);
+			}
+		});
+
+		function sendToServer(id,value,type){
+			console.log(id);
+			console.log(value);
+			console.log(type);
+			$.ajax({
+				url:"{% url 'core:update_ditto_account' %}",
+				type:"POST",
+				data:{id:id,type:type,value:value, 'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()},
+			})
+			.done(function(response){
+				console.log(response);
+			})
+			.fail(function(){
+			   console.log("Error Occured");
+			});
+
+		}
+	});
+</script>
+
+<script src="{% static 'js/admin-datatables.js' %}"></script> 
+
+{% endblock %}
+   

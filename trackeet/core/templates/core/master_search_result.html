@@ -1,0 +1,143 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link href="{% static 'vendor/dropzone.css' %}" rel="stylesheet"> 
+<link href="{% static 'css/date_picker.css' %}" rel="stylesheet"> 
+{% endblock %}
+{% block content %}
+
+
+
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+          <th> Arranger </th>
+					<th> Artist  </th>
+					<th> Artist Url</th> 
+					<th> Bpm   </th>
+					<th> C LINE       </th>
+					<th> Data Type    </th>
+					<th> Deleted    </th>
+					<th> Display UPC  </th>
+					<th> Download    </th>
+					<th> Error    </th>
+					<th> Exclusive    </th>
+					<th> Genre    </th>
+					<th> Genre_alt    </th>
+					<th> Genre_sub    </th>
+					<th> Genre_subalt    </th>
+					<th> Hidden_track    </th>
+					<th> ISRC    </th>
+					<th> Itunes_Link    </th>
+					<th> Label Catalogno    </th>
+					<th> Label Name    </th>
+					<th> Language    </th>
+					<th> Manufacturer UPC    </th>
+					<!-- <th> Master Carveouts    </th> -->
+					<th> P_LINE   </th>
+					<th> Parental Advisory    </th>
+					<th> Preview Clip Duration    </th>
+					<th> preview Clip Start Time    </th>
+					<th> Price Band    </th>
+					<th> Producer    </th>
+					<th> Publisher    </th>
+					<th> Recording Artist    </th>
+					<th> Release Date    </th>
+					<th> Release Name    </th>
+					<th> Royalty Rate    </th>
+					<th> Sales End Date    </th>
+					<th> Sales Start Date    </th>
+					<th> Song Version    </th>
+					<th> Territories    </th>
+					<!-- <th> Territories Carveouts    </th> -->
+					<th> Title    </th>
+					<th> Total Tracks    </th>
+					<th> Total Volumes    </th>
+					<th> Track Duration    </th>
+					<th> Track No    </th>
+					<th> Vendor Name    </th>
+					<th> Volume No    </th>
+					<th> Wholesale Price    </th>
+					<th> Writer    </th>
+					<th> zIDKey_UPCISRC    </th>
+              </tr>
+            </thead>
+            <tbody>
+                {% if master %}
+                {% for item in master %}
+              <tr>
+                <td>{{item.arranger}}</td>
+                <td>{{item.artist}}</td>
+                <td>{{item.artist_url}}</td>
+                <td>{{item.bpm}}</td>
+                <td>{{item.c_line}}</td>
+                <td>{{item.data_type}}</td>
+                <td>{{item.deleted}}</td>
+                <td>{{item.display_upc}}</td>
+                <td>{{item.download}}</td>
+                <td>{{item.error}}</td>
+                <td>{{item.exclusive}}</td>
+                <td>{{item.genre}}</td>
+                <td>{{item.genre_alt}}</td>
+                <td>{{item.genre_sub}}</td>
+                <td>{{item.genre_subalt}}</td>
+                <td>{{item.hidden_track}}</td>
+                <td>{{item.isrc}}</td>
+                <td>{{item.itunes_link}}</td>
+                <td>{{item.label_catalogno}}</td>
+                <td>{{item.label_name}}</td>
+                <td>{{item.language}}</td>
+                <td>{{item.manufacturer_upc}}</td>
+                <!-- <td>{{item.master_carveouts}}</td> -->
+                <td>{{item.p_line}}</td>
+                <td>{{item.parental_advisory}}</td>
+                <td>{{item.preview_clip_duration}}</td>
+                <td>{{item.preview_clip_start_time}}</td>
+                <td>{{item.price_band}}</td>
+                <td>{{item.producer}}</td>
+                <td>{{item.publisher}}</td>
+                <td>{{item.recording_artist}}</td>
+                <td>{{item.release_date}}</td>
+                <td>{{item.release_name}}</td>
+                <td>{{item.royalty_rate}}</td>
+                <td>{{item.sales_end_date}}</td>
+                <td>{{item.sales_start_date}}</td>
+                <td>{{item.song_version}}</td>
+                <td>{{item.territories}}</td>
+                <!-- <td>{{item.territories_carveouts}}</td> -->
+                <td>{{item.title}}</td>
+                <td>{{item.total_tracks}}</td>
+                <td>{{item.total_volumes}}</td>
+                <td>{{item.track_duration}}</td>
+                <td>{{item.track_no}}</td>
+                <td>{{item.vendor_name}}</td>
+                <td>{{item.volume_no}}</td>
+                <td>{{item.wholesale_price}}</td>
+                <td>{{item.writer}}</td>
+                <td>{{item.zIDKey_UPCISRC}}</td>
+              </tr>
+              {% endfor %}
+              {% else %}
+                <p>No drmsys record found.</p>
+            {% endif %}
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+     
+{%  endblock %}
+
+    <!-- /.container-wrapper-->
+
+{% block extra_script %}
+
+<script src="{% static 'vendor/dropzone.min.js' %}"></script> 
+<script src="{% static 'vendor/bootstrap-datepicker.js' %}"></script> 
+<script>$('input.date-pick').datepicker();</script>
+
+{% endblock %}
+   
